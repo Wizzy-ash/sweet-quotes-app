@@ -17,9 +17,10 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt update
+        sudo apt install -y aapt openjdk-17-jdk autoconf automake libtool pkg-config zlib1g-dev libncurses5 curl unzip
         pip install --upgrade pip
-        pip install cython
-        pip install buildozer
+        pip install cython buildozer
 
     - name: Build APK
       run: |
