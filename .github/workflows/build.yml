@@ -48,7 +48,8 @@ jobs:
           source $GITHUB_ENV
 
       - name: Accept Android SDK Licenses
-        run: yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+        run: |
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Install Android Build Tools, Platform Tools & AIDL
         run: |
