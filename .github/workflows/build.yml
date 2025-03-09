@@ -1,31 +1,30 @@
 name: Build APK
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.8'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.8"
 
-      - name: Install dependencies
-        run: |
-          sudo apt update && sudo apt install -y python3-pip openjdk-17-jdk zip
-          pip3 install --upgrade Cython buildozer
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y aidl adb unzip  # ✅ Add this to fix AIDL error
+        pip install --upgrade pip
+        pip install buildozer
 
-      - name: Build the APK
-        run: |
-          buildozer -v android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: sweet-quotes-apk
-          path: bin/*.apk
+    - name: Build APK
+      run: |
+        buildozer -v android debug
