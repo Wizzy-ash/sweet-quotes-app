@@ -22,6 +22,14 @@ jobs:
         pip install --upgrade pip
         pip install cython buildozer
 
+    - name: Install Android SDK & AIDL
+      run: |
+        sudo apt install -y android-sdk android-sdk-platform-tools android-sdk-build-tools
+        export ANDROID_SDK_ROOT=/usr/lib/android-sdk
+        export PATH=$ANDROID_SDK_ROOT/platform-tools:$PATH
+        export PATH=$ANDROID_SDK_ROOT/build-tools/33.0.2:$PATH
+        sdkmanager --install "build-tools;33.0.2" "platform-tools"
+
     - name: Build APK
       run: |
         buildozer -v android debug
