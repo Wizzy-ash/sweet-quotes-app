@@ -26,20 +26,20 @@ jobs:
 
     - name: Install Android SDK & Build Tools
       run: |
-        sudo mkdir -p /usr/local/lib/android/sdk
+        sudo mkdir -p /usr/local/lib/android/sdk/cmdline-tools/latest
         curl -fo sdk-tools-linux.zip https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-        sudo unzip sdk-tools-linux.zip -d /usr/local/lib/android/sdk
-        sudo mv /usr/local/lib/android/sdk/cmdline-tools /usr/local/lib/android/sdk/tools
+        sudo unzip sdk-tools-linux.zip -d /usr/local/lib/android/sdk/cmdline-tools/latest
         export ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
-        export PATH=$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
-        yes | sdkmanager --licenses
-        sdkmanager --install "platform-tools" "build-tools;33.0.2" "platforms;android-33" "ndk;25.2.9519653"
+        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
+        yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+        $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "build-tools;33.0.2" "platforms;android-33" "ndk;25.2.9519653"
 
     - name: Set Environment Variables
       run: |
-        echo "export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653" >> $GITHUB_ENV
-        echo "export ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-        echo "export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH" >> $GITHUB_ENV
+        echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653" >> $GITHUB_ENV
+        echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+        echo "PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH" >> $GITHUB_ENV
+
 
     - name: Initialize Buildozer
       run: |
