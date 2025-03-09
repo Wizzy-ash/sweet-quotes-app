@@ -53,9 +53,14 @@ jobs:
       - name: Install Android Build Tools, Platform Tools & AIDL
         run: |
           $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "build-tools;35.0.0" "cmdline-tools;latest"
-          export PATH=$ANDROID_SDK_ROOT/build-tools/35.0.0:$PATH
+          echo "export PATH=$ANDROID_SDK_ROOT/build-tools/35.0.0:$PATH" >> $GITHUB_ENV
           source $GITHUB_ENV
+
+          # DEBUG: Check if AIDL is found
+          echo "Checking if AIDL is installed..."
+          ls -la $ANDROID_SDK_ROOT/build-tools/35.0.0/
           which aidl || echo "AIDL still not found!"
+          test -f $ANDROID_SDK_ROOT/build-tools/35.0.0/aidl && echo "AIDL exists!" || echo "AIDL is missing!"
 
       - name: Build APK
         run: buildozer -v android debug
