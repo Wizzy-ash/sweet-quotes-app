@@ -41,13 +41,6 @@ jobs:
         echo "PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH" >> $GITHUB_ENV
 
 
-    - name: Initialize Buildozer
-      run: |
-        buildozer init
-        sed -i 's/python3/python3.8/' buildozer.spec
-        echo "version = 1.0.0" >> buildozer.spec
-        echo "source.dir = ." >> buildozer.spec
-
     - name: Build APK
       run: |
         buildozer -v android debug
