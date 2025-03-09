@@ -1,4 +1,6 @@
 [app]
+source.dir = .
+version = 1.0.0
 title = SweetQuotes
 package.name = sweetquotes
 package.domain = com.ashwin
