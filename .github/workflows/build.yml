@@ -47,7 +47,7 @@ jobs:
           echo "export ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           source $GITHUB_ENV
 
-      - name: Accept Android SDK Licenses
+      - name: Accept Android SDK Licenses (Force Accept)
         run: |
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
