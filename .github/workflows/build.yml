@@ -1,4 +1,4 @@
-name: Build APK with Buildozer (Docker)
+name: Build APK with Buildozer (Ubuntu)
 
 on:
   push:
@@ -14,16 +14,34 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set Up Dependencies
+      - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y python3-pip python3-setuptools python3-venv zip unzip
-
-      - name: Build APK using Buildozer Docker
+          sudo apt install -y python3-pip python3-setuptools python3-venv \
+                              zip unzip openjdk-17-jdk adb \
+                              libncurses5 curl wget git
+          pip install --upgrade pip
+          pip install cython buildozer
+      
+      - name: Install Android SDK & Accept Licenses
         run: |
-          docker run --rm -v $(pwd):/home/user/hostcwd \
-            kivy/buildozer \
-            bash -c "pip install --upgrade cython && buildozer android debug"
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/35.0.0:$PATH
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          cd $ANDROID_HOME/cmdline-tools
+          wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O sdk-tools.zip
+          unzip sdk-tools.zip
+          mv cmdline-tools latest
+          yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses
+          sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-33" "build-tools;35.0.0" "cmdline-tools;latest"
+
+      - name: Initialize & Configure Buildozer
+        run: |
+          buildozer init
+          sed -i 's/python3/python3.8/' buildozer.spec
+          echo "version = 1.0.0" >> buildozer.spec
+          echo "source.dir = ." >> buildozer.spec
+          buildozer -v android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
