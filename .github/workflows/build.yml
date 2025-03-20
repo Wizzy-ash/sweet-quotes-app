@@ -19,7 +19,7 @@ jobs:
           sudo apt update
           sudo apt install -y python3-pip python3-setuptools python3-venv \
                               zip unzip openjdk-17-jdk adb \
-                              libncurses5 curl wget git
+                              libncurses5-dev curl wget git
           pip install --upgrade pip
           pip install cython buildozer
       
